@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV File Reader</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        #csvUpload { margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <h1>CSV File Reader</h1>
+    <input type="file" id="csvUpload" accept=".csv">
+    
+    <script>
+        document.getElementById('csvUpload').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const csvData = event.target.result;
+                try {
+                    const parsedData = d3.csvParse(csvData);
+                    console.log("Parsed CSV Data:", parsedData);
+                    alert(`Successfully parsed ${parsedData.length} rows!`);
+                } catch (error) {
+                    console.error("CSV parsing error:", error);
+                    alert("Error parsing CSV file. Please check the format.");
+                }
+            };
+            reader.onerror = () => {
+                console.error("File reading error");
+                alert("Failed to read file");
+            };
+            reader.readAsText(file);
+        });
+    </script>
+</body>
+</html>
+
